@@ -90,7 +90,7 @@ OmniBAR follows a clean, modular architecture that makes it easy to understand a
 ```text
 omnibar/
 ├── core/                     # Core benchmarking engine
-│   ├── benchmarker.py       # Main OmniBARmarker class
+│   ├── benchmarker.py       # Main OmniBarmarker class
 │   └── types.py             # Type definitions and result classes
 ├── objectives/              # Evaluation objectives
 │   ├── base.py             # Base objective class
@@ -178,7 +178,7 @@ tqdm==4.67.1
 Want to see OmniBAR in action immediately? Here's the minimal example:
 
 ```python
-from omnibar import OmniBARmarker, Benchmark
+from omnibar import OmniBarmarker, Benchmark
 from omnibar.objectives import StringEqualityObjective
 
 # 1. Define a simple agent
@@ -198,7 +198,7 @@ benchmark = Benchmark(
 )
 
 # 3. Run evaluation
-benchmarker = OmniBARmarker(
+benchmarker = OmniBarmarker(
     executor_fn=create_agent,
     executor_kwargs={},
     initial_input=[benchmark]
@@ -223,7 +223,7 @@ Here's a complete example demonstrating OmniBAR's core capabilities:
 ```python
 import asyncio
 from dotenv import load_dotenv
-from omnibar import OmniBARmarker, Benchmark
+from omnibar import OmniBarmarker, Benchmark
 from omnibar.objectives import LLMJudgeObjective, StringEqualityObjective, CombinedBenchmarkObjective
 from omnibar.core.types import BoolEvalResult, FloatEvalResult
 
@@ -269,7 +269,7 @@ async def main():
         iterations=5
     )
     
-    benchmarker = OmniBARmarker(
+    benchmarker = OmniBarmarker(
         executor_fn=create_agent,
         executor_kwargs={},
         initial_input=[benchmark]
@@ -474,7 +474,7 @@ def create_langchain_agent():
     agent = create_openai_functions_agent(llm, tools, prompt=None)
     return agent
 
-benchmarker = OmniBARmarker(
+benchmarker = OmniBarmarker(
     executor_fn=create_langchain_agent,
     executor_kwargs={},
     agent_invoke_method_name="invoke",
@@ -488,13 +488,13 @@ benchmarker = OmniBARmarker(
 <summary><strong>Pydantic AI Integration</strong></summary>
 
 ```python
-from omnibar.integrations.pydantic_ai import PydanticAIOmniBARmarker
+from omnibar.integrations.pydantic_ai import PydanticAIOmniBarmarker
 from pydantic_ai import Agent
 
 def create_pydantic_agent():
     return Agent(model="openai:gpt-4", result_type=str)
 
-benchmarker = PydanticAIOmniBARmarker(
+benchmarker = PydanticAIOmniBarmarker(
     executor_fn=create_pydantic_agent,
     initial_input=[benchmark]
 )
@@ -514,7 +514,7 @@ class MyCustomAgent:
 def create_custom_agent():
     return MyCustomAgent()
 
-benchmarker = OmniBARmarker(
+benchmarker = OmniBarmarker(
     executor_fn=create_custom_agent,
     executor_kwargs={},
     agent_invoke_method_name="run",  # Specify your agent's method
