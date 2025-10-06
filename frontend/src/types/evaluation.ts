@@ -28,3 +28,16 @@ export interface EvaluationRun {
     };
   };
 }
+
+export interface EvaluationFormData {
+  prompt: string;
+  expectedOutput?: string;
+  objective: EvaluationObjective;
+  model: ModelType;
+}
+
+export interface DashboardStats {
+  totalRuns: number;
+  averageScore: number;
+  successRate: number;
+}
