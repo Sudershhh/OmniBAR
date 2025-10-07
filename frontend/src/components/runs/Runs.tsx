@@ -8,7 +8,7 @@ import { sampleRuns } from "@/data/evaluation";
 
 export default function RunsPage() {
   const navigate = useNavigate();
-  const [runs, setRuns] = useState<EvaluationRun[]>(sampleRuns);
+  const [runs] = useState<EvaluationRun[]>(sampleRuns);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
