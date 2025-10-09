@@ -1,4 +1,3 @@
-// api/endpoints.ts
 import { apiClient } from "./client";
 import type {
   EvaluationRequest,

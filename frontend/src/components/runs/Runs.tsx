@@ -40,7 +40,6 @@ export default function RunsPage() {
           </div>
         </div>
 
-        {/* Error State */}
         {error && (
           <div className="rounded-md bg-destructive/15 p-4">
             <div className="flex">
@@ -64,7 +63,6 @@ export default function RunsPage() {
           </div>
         )}
 
-        {/* Loading State */}
         {isLoading && (
           <div className="flex h-64 items-center justify-center text-muted-foreground">
             <div className="flex items-center gap-2">
@@ -74,7 +72,6 @@ export default function RunsPage() {
           </div>
         )}
 
-        {/* Filters and Table */}
         {!isLoading && !error && (
           <>
             <RunsFilters

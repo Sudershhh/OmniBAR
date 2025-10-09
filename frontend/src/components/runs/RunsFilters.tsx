@@ -80,7 +80,6 @@ export function RunsFilters({
     return value !== "all";
   });
 
-  // Get unique values for filter options
   const uniqueModels = Array.from(new Set(runs.map((run) => run.model)));
   const uniqueObjectives = Array.from(
     new Set(runs.map((run) => run.objective))
@@ -144,7 +143,6 @@ export function RunsFilters({
             </div>
           </div>
 
-          {/* Active Filter Tags */}
           {hasActiveFilters && (
             <div className="flex flex-wrap gap-2">
               {filters.status !== "all" && (
@@ -195,11 +193,9 @@ export function RunsFilters({
             </div>
           )}
 
-          {/* Collapsible Filter Options */}
           <Collapsible open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
             <CollapsibleContent>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                {/* Status Filter */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
@@ -239,7 +235,6 @@ export function RunsFilters({
                   </Select>
                 </div>
 
-                {/* Model Filter */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <Cpu className="h-4 w-4" />
@@ -265,7 +260,6 @@ export function RunsFilters({
                   </Select>
                 </div>
 
-                {/* Objective Filter */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <Target className="h-4 w-4" />
@@ -294,7 +288,6 @@ export function RunsFilters({
                   </Select>
                 </div>
 
-                {/* Score Range Filter */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <Target className="h-4 w-4" />
@@ -321,7 +314,6 @@ export function RunsFilters({
                   </Select>
                 </div>
 
-                {/* Date Range Filter */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <Calendar className="h-4 w-4" />

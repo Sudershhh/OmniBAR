@@ -76,7 +76,6 @@ export default function Evaluate() {
       navigate(`/runs/${result.run_id}`);
     } catch (error) {
       console.error("Evaluation failed:", error);
-      // Error handling is done in the mutation
     }
   };
 
@@ -97,7 +96,6 @@ export default function Evaluate() {
       onSubmit={handleSubmit}
       className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8"
     >
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           New Evaluation
@@ -108,7 +106,6 @@ export default function Evaluate() {
         </p>
       </div>
 
-      {/* Status Messages */}
       {submitEvaluation.isError && (
         <div className="rounded-md bg-destructive/15 p-4">
           <div className="flex">
@@ -178,7 +175,6 @@ export default function Evaluate() {
         </CardContent>
       </Card>
 
-      {/* Evaluation Settings */}
       <Card>
         <CardHeader>
           <CardTitle>Evaluation Settings</CardTitle>
@@ -222,7 +218,6 @@ export default function Evaluate() {
               </p>
             </div>
 
-            {/* Model */}
             <div className="space-y-2">
               <Label htmlFor="model">Model</Label>
               <Select
@@ -251,7 +246,6 @@ export default function Evaluate() {
         </CardContent>
       </Card>
 
-      {/* Buttons */}
       <div className="flex gap-4">
         <Button type="submit" size="lg" disabled={isPending} className="gap-2">
           {isPending ? (

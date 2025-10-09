@@ -36,7 +36,6 @@ export default function RunDetail() {
     isRefetching,
   } = useRunById(id || "");
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -50,7 +49,6 @@ export default function RunDetail() {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="min-h-screen bg-background mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -78,7 +76,6 @@ export default function RunDetail() {
     );
   }
 
-  // Not found state
   if (!run) {
     return (
       <div className="min-h-screen bg-background mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -95,7 +92,6 @@ export default function RunDetail() {
   return (
     <div className="min-h-screen bg-background mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 ">
       <div className="space-y-6">
-        {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
@@ -129,7 +125,6 @@ export default function RunDetail() {
           </div>
         </div>
 
-        {/* Metadata */}
         <Card>
           <CardContent className="pt-6">
             <div className="flex flex-wrap gap-6">
@@ -169,13 +164,10 @@ export default function RunDetail() {
           </CardContent>
         </Card>
 
-        {/* Score Display */}
         <ScoreDisplay score={run.score} />
 
-        {/* Objectives Breakdown */}
         <ObjectivesBreakdown objectives={run.objectives} />
 
-        {/* Prompt & Response */}
         <div className="grid gap-6 lg:grid-cols-2">
           <CodeBlock title="Prompt" content={run.prompt} />
           {run.agent_response && (
@@ -187,7 +179,6 @@ export default function RunDetail() {
           <CodeBlock title="Expected Output" content={run.expected_output} />
         )}
 
-        {/* Error Message */}
         {run.error_message && (
           <Card className="border-destructive">
             <CardHeader>
@@ -199,7 +190,6 @@ export default function RunDetail() {
           </Card>
         )}
 
-        {/* Raw JSON */}
         <Collapsible open={isJsonOpen} onOpenChange={setIsJsonOpen}>
           <Card>
             <CardHeader>
