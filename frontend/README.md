@@ -79,3 +79,22 @@ The app uses:
 - TypeScript for type safety
 
 Components are organized by feature with clear separation between UI and business logic.
+
+## Features Cut-Off
+
+- User Authentication & Authorization
+- Data Export (CSV/PDF) & Reporting
+- Batch Evaluation Processing
+- Model Management & Comparison
+
+## Tradeoffs
+
+- React over Vue/Angular because of TS support and Tanstack Query integration
+- Chose Synchronous over Asynchronous Evaluation (good for immediate feedback but bad for long running tasks)
+
+## Lessons Learned
+
+1. **Scope Creep is Real**: Every feature seemed "simple" but added complexity
+2. **Demo-First Thinking**: Focus on what demonstrates the core value proposition
+3. **User Journey Matters**: Single evaluation flow was more compelling than batch processing
+4. **Technical Debt vs. Features**: Sometimes it's better to do fewer things well

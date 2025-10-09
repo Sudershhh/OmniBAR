@@ -102,3 +102,22 @@ API documentation available at:
 
 - http://localhost:8000/docs (Swagger UI)
 - http://localhost:8000/redoc (ReDoc)
+
+## Assumptions
+
+- OpenAI API Access: Assumes valid OpenAI API key with sufficient credits
+- Synchronous Evaluation: Evaluations run synchronously (no background job processing)
+- No Data Persistence: Database file is not backed up or replicated
+
+## Tradeoffs
+
+- Chose SQLite over PostgreSQL : Super easy for demos but not for production scale
+- Chose CORS Allow-All for Development : Security risk for production and allowing every domain to access the endpoints
+
+## What I Kept and Why
+
+### **Core OmniBAR Integration**
+
+- All three evaluation objectives (String Equality, LLM Judge, Combined)
+- Proper result extraction and storage
+- Clean separation between frontend and backend
