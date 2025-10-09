@@ -1,9 +1,11 @@
 export type EvaluationObjective = "string-equality" | "llm-judge" | "combined";
 export type ModelType =
   | "gpt-4"
+  | "gpt-4-turbo"
+  | "gpt-4o"
+  | "gpt-4o-mini"
   | "gpt-3.5-turbo"
-  | "claude-3-opus"
-  | "claude-3-sonnet";
+  | "gpt-3.5-turbo-16k";
 export type RunStatus = "pending" | "running" | "completed" | "failed";
 
 // Frontend form data

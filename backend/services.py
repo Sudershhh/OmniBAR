@@ -29,6 +29,15 @@ class SimpleAgent:
 
 def create_agent_for_model(model: str):
     """Create agent based on model selection"""
+    # Validate that only OpenAI models are supported
+    valid_models = {
+        "gpt-4", "gpt-4-turbo", "gpt-4o", "gpt-4o-mini", 
+        "gpt-3.5-turbo", "gpt-3.5-turbo-16k"
+    }
+    
+    if model not in valid_models:
+        raise ValueError(f"Unsupported model: {model}. Only OpenAI models are supported: {', '.join(valid_models)}")
+    
     return SimpleAgent(model)
 
 def create_objective_from_request(objective: str, expected_output: Optional[str] = None):
