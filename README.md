@@ -25,7 +25,7 @@ From this work we are releasing **OmniBAR** (**B**enchmarking **A**gentic **R**e
 
 - [About Us: BrainGnosis](#about-us-braingnosis)
 - [Why OmniBAR?](#why-omnibar)
-- [Why OmniBAR is Different](#why-omnibar-is-different)  
+- [Why OmniBAR is Different](#why-omnibar-is-different)
 - [How It Works](#how-it-works)
 - [Installation](#installation)
 - [30-Second Demo](#30-second-demo)
@@ -243,7 +243,7 @@ def create_agent():
 # Create evaluation objectives
 accuracy_objective = StringEqualityObjective(
     name="exact_accuracy",
-    output_key="response", 
+    output_key="response",
     goal="The capital of France is Paris."
 )
 
@@ -268,16 +268,16 @@ async def main():
         objective=combined_objective,
         iterations=5
     )
-    
+
     benchmarker = OmniBarmarker(
         executor_fn=create_agent,
         executor_kwargs={},
         initial_input=[benchmark]
     )
-    
+
     # Execute with concurrency control
     results = await benchmarker.benchmark_async(max_concurrent=3)
-    
+
     # View results
     benchmarker.print_logger_summary()
     return results
@@ -292,7 +292,7 @@ if __name__ == "__main__":
 **Got the basic example working?** Here's your learning path:
 
 1. **🔍 Explore Examples:** Check out `examples/` directory for real-world use cases
-2. **🎛️ Try Different Objectives:** Experiment with LLM Judge and Combined objectives  
+2. **🎛️ Try Different Objectives:** Experiment with LLM Judge and Combined objectives
 3. **⚡ Scale Up:** Use async benchmarking with `benchmark_async()` for faster evaluation
 4. **🔧 Customize:** Create your own evaluation objectives for domain-specific needs
 5. **📊 Analyze:** Dive deeper with `print_logger_details()` for comprehensive insights
@@ -340,13 +340,13 @@ Here are real-world scenarios where OmniBAR excels:
 
 ### 💡 **When to Choose Each Objective Type**
 
-| Objective Type | Best For | Example Use Case | Key Benefit |
-|---|---|---|---|
-| **LLM Judge** | Subjective qualities | "Is this explanation clear?" | Human-like evaluation |
-| **Output-Based** | Exact requirements | "Does output match format?" | Precise validation |
-| **Path-Based** | Process evaluation | "Did agent use tools correctly?" | Workflow assessment |
-| **State-Based** | System changes | "Was database updated properly?" | State verification |
-| **Combined** | Comprehensive testing | "All of the above" | Complete coverage |
+| Objective Type   | Best For              | Example Use Case                 | Key Benefit           |
+| ---------------- | --------------------- | -------------------------------- | --------------------- |
+| **LLM Judge**    | Subjective qualities  | "Is this explanation clear?"     | Human-like evaluation |
+| **Output-Based** | Exact requirements    | "Does output match format?"      | Precise validation    |
+| **Path-Based**   | Process evaluation    | "Did agent use tools correctly?" | Workflow assessment   |
+| **State-Based**  | System changes        | "Was database updated properly?" | State verification    |
+| **Combined**     | Comprehensive testing | "All of the above"               | Complete coverage     |
 
 ## Core Concepts
 
@@ -356,7 +356,7 @@ OmniBAR provides multiple evaluation objective types, each designed to address d
 
 #### LLM Judge Objective
 
-**When to use:** *"How do I evaluate subjective qualities like helpfulness, creativity, or nuanced correctness that can't be captured by exact matching?"*
+**When to use:** _"How do I evaluate subjective qualities like helpfulness, creativity, or nuanced correctness that can't be captured by exact matching?"_
 
 Perfect for assessing complex, subjective criteria where human-like judgment is needed.
 
@@ -370,7 +370,7 @@ binary_objective = LLMJudgeObjective(
 
 # Numerical evaluation (0.0-1.0 scoring)
 scoring_objective = LLMJudgeObjective(
-    name="quality_score", 
+    name="quality_score",
     output_key="response",
     goal="Provide comprehensive and helpful information",
     valid_eval_result_type=FloatEvalResult
@@ -379,7 +379,7 @@ scoring_objective = LLMJudgeObjective(
 
 #### Output-Based Objectives
 
-**When to use:** *"How do I verify that my agent produces the exact output I expect, or matches specific patterns?"*
+**When to use:** _"How do I verify that my agent produces the exact output I expect, or matches specific patterns?"_
 
 Ideal for deterministic evaluations where you need precise output matching or format validation.
 
@@ -401,7 +401,7 @@ pattern_objective = RegexMatchObjective(
 
 #### Path-Based and State-Based Objectives
 
-**When to use:** *"How do I evaluate not just what my agent outputs, but HOW it gets there and what changes it makes?"*
+**When to use:** _"How do I evaluate not just what my agent outputs, but HOW it gets there and what changes it makes?"_
 
 Essential for evaluating agent reasoning processes, tool usage sequences, and system state modifications.
 
@@ -432,7 +432,7 @@ The `examples/` directory contains comprehensive examples:
 
 - **`pydantic_ai_example.py`** - Model parity comparison (Claude 3.5 vs GPT-4)
 - **`document_extraction_evolution.py`** - Document extraction prompt evolution (4 iterative improvements)
-- **`langchain_embedding_example.py`** - LangChain embedding benchmarks  
+- **`langchain_embedding_example.py`** - LangChain embedding benchmarks
 - **`inventory_management_example.py`** - Complex inventory management agent evaluation
 
 **📋 Full Example List:**
@@ -535,10 +535,10 @@ custom_objective = LLMJudgeObjective(
     goal="Correctly identify the author",
     prompt="""
     Evaluate this response for factual correctness.
-    
+
     Expected: {expected_output}
     Agent Response: {input}
-    
+
     Return true if the information is factually correct.
     {format_instructions}
     """,
@@ -553,7 +553,7 @@ custom_objective = LLMJudgeObjective(
 ```python
 def custom_evaluation_function(input_dict: dict) -> dict:
     agent_output = input_dict["input"]
-    
+
     # Your custom logic here
     if "paris" in agent_output.lower():
         score = 0.9
@@ -561,7 +561,7 @@ def custom_evaluation_function(input_dict: dict) -> dict:
     else:
         score = 0.1
         message = "Failed to identify correct answer"
-    
+
     return {"result": score, "message": message}
 
 custom_objective = LLMJudgeObjective(
@@ -584,7 +584,7 @@ class ScoreWithReason(ValidEvalResult):
 
 class CustomObjective(BaseBenchmarkObjective):
     valid_eval_result_type = ScoreWithReason
-    
+
     def _eval_fn(self, goal, formatted_output, **kwargs):
         # Your evaluation logic
         score = 0.8
@@ -697,6 +697,32 @@ A: Use `benchmarker.print_logger_details(detail_level="detailed")` to see full e
 
 Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
 
+## Project Components
+
+This repository includes a complete AI agent testing platform with separate frontend and backend components:
+
+### Frontend
+
+A React-based web application for submitting evaluations and viewing results.
+
+- **Location**: `frontend/`
+- **Documentation**: [Frontend README](frontend/README.md)
+- **Tech Stack**: React, TypeScript, TanStack Query, Tailwind CSS
+
+### Backend
+
+A FastAPI service that handles evaluation requests and integrates with OmniBAR.
+
+- **Location**: `backend/`
+- **Documentation**: [Backend README](backend/README.md)
+- **Tech Stack**: FastAPI, SQLAlchemy, OmniBAR, OpenAI API
+
+### Quick Start
+
+1. Set up the backend following [Backend README](backend/README.md)
+2. Set up the frontend following [Frontend README](frontend/README.md)
+3. Start both services and begin testing AI agents
+
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/BrainGnosis/OmniBAR/issues)
@@ -713,6 +739,6 @@ Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
   <img src="https://raw.githubusercontent.com/BrainGnosis/OmniBAR/main/assets/BrainGnosis.png" alt="BrainGnosis" width="220">
 </a>
 
-*Making AI Smarter for Humans*
+_Making AI Smarter for Humans_
 
 </div>
