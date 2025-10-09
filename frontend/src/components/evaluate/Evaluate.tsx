@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useSubmitEvaluation } from "@/hooks/useEvaluations";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Play } from "lucide-react";
+import { Loader2, Play, XCircle } from "lucide-react";
 import type {
   EvaluationFormData,
   EvaluationObjective,
@@ -26,8 +27,8 @@ import type {
 
 export default function Evaluate() {
   const navigate = useNavigate();
+  const submitEvaluation = useSubmitEvaluation();
 
-  const [isPending, setIsPending] = useState(false);
   const [formData, setFormData] = useState<EvaluationFormData>({
     prompt: "",
     expectedOutput: "",
@@ -57,19 +58,26 @@ export default function Evaluate() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
-    setIsPending(true);
+    try {
+      const result = await submitEvaluation.mutateAsync({
+        prompt: formData.prompt,
+        expectedOutput: formData.expectedOutput || undefined,
+        objective: formData.objective,
+        model: formData.model,
+        iterations: 1,
+      });
 
-    // simulate async process
-    setTimeout(() => {
-      setIsPending(false);
-      alert("✅ Evaluation completed successfully! (dummy simulation)");
-      navigate("/runs/1"); // Simulated route
-    }, 1500);
+      // Navigate to the new run detail page
+      navigate(`/runs/${result.run_id}`);
+    } catch (error) {
+      console.error("Evaluation failed:", error);
+      // Error handling is done in the mutation
+    }
   };
 
   const handleReset = () => {
@@ -82,13 +90,14 @@ export default function Evaluate() {
     setErrors({});
   };
 
+  const isPending = submitEvaluation.isPending;
+
   return (
     <form
       onSubmit={handleSubmit}
       className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8"
     >
-      {/* Prompt Configuration */}
-
+      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           New Evaluation
@@ -98,6 +107,24 @@ export default function Evaluate() {
           criteria
         </p>
       </div>
+
+      {/* Status Messages */}
+      {submitEvaluation.isError && (
+        <div className="rounded-md bg-destructive/15 p-4">
+          <div className="flex">
+            <XCircle className="h-5 w-5 text-destructive" />
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-destructive">
+                Evaluation Failed
+              </h3>
+              <div className="mt-2 text-sm text-destructive">
+                {submitEvaluation.error?.message ||
+                  "An unexpected error occurred"}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Card>
         <CardHeader>

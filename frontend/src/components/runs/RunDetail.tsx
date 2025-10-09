@@ -1,12 +1,21 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useRunById } from "@/hooks/useRuns";
 import { ScoreDisplay } from "./ScoreDisplay";
 import { ObjectivesBreakdown } from "./ObjectivesBreakdown";
 import { CodeBlock } from "./Codeblock";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Play, Calendar, Cpu } from "lucide-react";
+import {
+  ArrowLeft,
+  Play,
+  Calendar,
+  Cpu,
+  Loader2,
+  RefreshCw,
+  AlertCircle,
+} from "lucide-react";
 import { format } from "date-fns";
 import {
   Collapsible,
@@ -14,35 +23,62 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-import type { EvaluationRun } from "@/types/evaluation";
-import { sampleRuns } from "@/data/evaluation";
-
 export default function RunDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [run, setRun] = useState<EvaluationRun | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isJsonOpen, setIsJsonOpen] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const found = sampleRuns.find((r) => r.id === id);
-      setRun(found || null);
-      setIsLoading(false);
-    }, 800);
-  }, [id]);
+  const {
+    data: run,
+    isLoading,
+    error,
+    refetch,
+    isRefetching,
+  } = useRunById(id || "");
 
+  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex h-64 items-center justify-center text-muted-foreground">
-          Loading evaluation...
+          <div className="flex items-center gap-2">
+            <Loader2 className="h-5 w-5 animate-spin" />
+            Loading evaluation...
+          </div>
         </div>
       </div>
     );
   }
 
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex h-64 flex-col items-center justify-center gap-4">
+          <div className="flex items-center gap-2 text-destructive">
+            <AlertCircle className="h-5 w-5" />
+            <p>Failed to load evaluation</p>
+          </div>
+          <p className="text-sm text-muted-foreground text-center max-w-md">
+            {error instanceof Error
+              ? error.message
+              : "An unexpected error occurred"}
+          </p>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => refetch()}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Try Again
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/runs")}>
+              Back to Runs
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Not found state
   if (!run) {
     return (
       <div className="min-h-screen bg-background mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -74,10 +110,23 @@ export default function RunDetail() {
               </p>
             </div>
           </div>
-          <Button className="gap-2" onClick={() => navigate("/evaluate")}>
-            <Play className="h-4 w-4" />
-            Run Again
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => refetch()}
+              disabled={isRefetching}
+              className="gap-2"
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${isRefetching ? "animate-spin" : ""}`}
+              />
+              Refresh
+            </Button>
+            <Button className="gap-2" onClick={() => navigate("/evaluate")}>
+              <Play className="h-4 w-4" />
+              Run Again
+            </Button>
+          </div>
         </div>
 
         {/* Metadata */}
@@ -102,6 +151,20 @@ export default function RunDetail() {
                   {run.objective.replace("-", " ")}
                 </Badge>
               </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Status:</span>
+                <Badge
+                  variant={
+                    run.status === "completed"
+                      ? "default"
+                      : run.status === "failed"
+                      ? "destructive"
+                      : "secondary"
+                  }
+                >
+                  {run.status}
+                </Badge>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -115,13 +178,25 @@ export default function RunDetail() {
         {/* Prompt & Response */}
         <div className="grid gap-6 lg:grid-cols-2">
           <CodeBlock title="Prompt" content={run.prompt} />
-          {run.agentResponse && (
-            <CodeBlock title="Agent Response" content={run.agentResponse} />
+          {run.agent_response && (
+            <CodeBlock title="Agent Response" content={run.agent_response} />
           )}
         </div>
 
-        {run.expectedOutput && (
-          <CodeBlock title="Expected Output" content={run.expectedOutput} />
+        {run.expected_output && (
+          <CodeBlock title="Expected Output" content={run.expected_output} />
+        )}
+
+        {/* Error Message */}
+        {run.error_message && (
+          <Card className="border-destructive">
+            <CardHeader>
+              <CardTitle className="text-destructive">Error Details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-destructive">{run.error_message}</p>
+            </CardContent>
+          </Card>
         )}
 
         {/* Raw JSON */}
